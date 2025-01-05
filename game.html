@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="game.png">
+    <title>Movee-game</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #121212, #1f1f1f);
+            color: #f4f4f4;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #1f1f1f;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        header img {
+            width: 50px;
+        }
+
+        header nav a {
+            color: #f4f4f4;
+            text-decoration: none;
+            margin-left: 15px;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        header nav a:hover {
+            color: #00b6f1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #00b6f1;
+            margin-bottom: 40px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            border-radius: 30px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #f4f4f4;
+            outline: none;
+            transition: border-color 0.3s ease;
+            margin: 0 auto 30px;
+        }
+
+        .search-bar::placeholder {
+            color: #bbb;
+        }
+
+        .search-bar:focus {
+            border-color: #00b6f1;
+        }
+
+        /* Game List (Grid Layout) */
+        .game-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Game Item Card */
+        .game-item {
+            background-color: #2d2d2d;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .game-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 182, 241, 0.3);
+        }
+
+        .game-item img {
+            border-radius: 10px;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        .game-item h3 {
+            font-size: 1.5rem;
+            color: #f4f4f4;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .download-link {
+            background-color: #00b6f1;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-link:hover {
+            background-color: #0078a0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html">
+    <img src="game.png" alt="Logo">
+    </a>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="mailto:laksindujanith18104@gmail.com">Contact</a>
+        <a href="abiutgame.html">About</a>
+    </nav>
+</header>
+
+<div class="container">
+    <h1>Search and Download Games</h1>
+    <input type="text" id="search" class="search-bar" placeholder="Search for games...">
+
+    <div id="gameResults" class="game-list"></div>
+</div>
+
+<script>
+    const apiKey = '83223d1a3d9d48c4a22595a9ba3211ed';
+    const baseUrl = 'https://api.rawg.io/api/games';
+
+    async function fetchGames(query) {
+        const response = await fetch(`${baseUrl}?key=${apiKey}&page_size=9&search=${query}`);
+        const data = await response.json();
+        return data.results;
+    }
+
+    function displayGames(games) {
+        const gameResults = document.getElementById('gameResults');
+        gameResults.innerHTML = '';
+
+        if (games.length === 0) {
+            gameResults.innerHTML = '<p>No results found.</p>';
+            return;
+        }
+
+        games.forEach(game => {
+            const gameItem = document.createElement('div');
+            gameItem.classList.add('game-item');
+
+            const gameImage = game.background_image || 'https://via.placeholder.com/200x150';
+            const gameName = game.name;
+            const downloadLink = `https://fitgirl-repacks.site/${gameName.replace(/\s+/g, '-').toLowerCase()}`;
+
+            gameItem.innerHTML = `
+                <img src="${gameImage}" alt="${gameName}">
+                <h3>${gameName}</h3>
+                <a href="${downloadLink}" class="download-link" target="_blank">Download Game</a>
+            `;
+
+            gameResults.appendChild(gameItem);
+        });
+    }
+
+    document.getElementById('search').addEventListener('input', async function (e) {
+        const query = e.target.value;
+        if (query.length > 2) {
+            const games = await fetchGames(query);
+            displayGames(games);
+        }
+    });
+</script>
+
+</body>
+</html>

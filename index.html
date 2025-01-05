@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<head>
+    <link rel="icon" href="new.png">
+    <title>Movee</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('back.jpeg') no-repeat center center/cover;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        header {
+            position: absolute;
+            top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        header a.logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        header a.logo img {
+            width: 60px;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #00b7ff;
+        }
+
+        .main {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .main h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .main a.button {
+            text-decoration: none;
+            background: #6A1B9A;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: background 0.3s ease;
+        }
+
+        .main a.button:hover {
+            background: #8e24aa;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        footer p {
+            margin-bottom: 5px;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: rgb(231, 150, 0);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 30px;
+            }
+
+            nav a {
+                font-size: 1rem;
+            }
+
+            .main h1 {
+                font-size: 2.5rem;
+            }
+
+            .main a.button {
+                padding: 12px 30px;
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav a {
+                font-size: 0.9rem;
+            }
+
+            .main h1 {
+                font-size: 2rem;
+            }
+
+            .main a.button {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="about.html" class="logo">
+            <img src="new.png" alt="Logo">
+        </a>
+        <nav>
+            <a href="Music.html">Explore</a>
+            <a href="game.html">Game</a>
+            <a href="mailto:laksindujanith18104@gmail.com">contact</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <div class="main">
+        <h1>Your world, your music, your rhythm</h1>
+        <a href="Music.html" class="button">Explore</a>
+    </div>
+
+    <footer>
+        <p>developed by @laksindu 2025</p>
+        <a href="mailto:laksindujanith18104@gmail.com">laksindujanith18104@gmail.com</a>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<head>
+    <link rel="icon" type="image/x-icon" href="new.png">
+    <title>Movee</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #121212); /* Gradient background */
+            color: #FFFFFF;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        header a.logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        header a.logo img {
+            width: 50px;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #00b7ff;
+            ;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #e4e4e4;
+            margin-top: 120px;
+            text-align: center;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            width: 80%;
+            max-width: 600px;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 50px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            outline: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .search-bar::placeholder {
+            color: #BBBBBB;
+        }
+
+        .search-bar:focus {
+            box-shadow: 0 0 10px rgba(140, 0, 255, 0.7);
+        }
+
+        /* Song List (Grid Layout) */
+        .song-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 80%;
+            margin-top: 20px;
+        }
+
+        /* Song Item Card */
+        .song-item {
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .song-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(140, 0, 255, 0.5);
+        }
+
+        .song-item img {
+            border-radius: 12px;
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+
+        /* Song Title */
+        .song-item h3 {
+            font-size: 1.5rem;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .song-item p {
+            color: #BBBBBB;
+            margin-bottom: 15px;
+        }
+
+        /* Play Link */
+        .play-link {
+            background-color: #3496d8;
+            color: #000000;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .play-link:hover {
+            background-color: #8e24aa;
+        }
+
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #AAAAAA;
+            margin-top: 40px;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 1rem;
+            color: #FFD700;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #FFD700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="new.png" alt="Logo">
+        </a>
+        <nav>
+            <a href="game.html">Game</a>
+            <a href="mailto:laksindujanith18104@gmail.com">Contact</a>
+            <a href="about.html">About</a>
+        </nav>
+    </header>
+
+    <h1>Search and Play Songs</h1>
+
+    <input type="text" id="search" class="search-bar" placeholder="Search for songs...">
+
+    <div id="songResults" class="song-list"></div>
+    <script>
+        const apiKey = 'd5ecf3a72a14328cd068ec49eba71229'; // Replace with your Last.fm API key
+        const baseUrl = 'https://ws.audioscrobbler.com/2.0/';
+
+        // Function to fetch songs from Last.fm API
+        async function fetchSongs(query) {
+            const response = await fetch(`${baseUrl}?method=track.search&track=${query}&api_key=${apiKey}&format=json&limit=9`);
+            const data = await response.json();
+            return data.results.trackmatches.track;
+        }
+
+        // Function to display songs on the page
+        function displaySongs(songs) {
+            const songResults = document.getElementById('songResults');
+            songResults.innerHTML = ''; // Clear previous results
+
+            if (songs.length === 0) {
+                songResults.innerHTML = '<p class="no-results">No songs found</p>';
+                return;
+            }
+
+            songs.forEach(song => {
+                const songItem = document.createElement('div');
+                songItem.classList.add('song-item');
+
+                const songImage = song.image[2]['#text'] || 'https://via.placeholder.com/250x200';
+                const songTitle = song.name;
+                const songArtist = song.artist;
+
+                // Create a play link (redirect to SoundCloud or another platform)
+                const playLink = `https://soundcloud.com/search?q=${encodeURIComponent(songTitle)}`;
+
+                // Create the song item HTML
+                songItem.innerHTML = `
+                    <img src="songpic.jpeg" alt="${songTitle}">
+                    <h3>${songTitle}</h3>
+                    <p>${songArtist}</p>
+                    <a href="${playLink}" class="play-link" target="_blank">Play on SoundCloud</a>
+                `;
+
+                songResults.appendChild(songItem);
+            });
+        }
+
+        // Event listener for the search input
+        document.getElementById('search').addEventListener('input', async function (e) {
+            const query = e.target.value;
+            if (query.length > 2) { // Only search after 3 characters
+                const songs = await fetchSongs(query);
+                displaySongs(songs);
+            }
+        });
+    </script>
+</body>
+</html>
